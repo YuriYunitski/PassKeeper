@@ -119,14 +119,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             updateUI();
         } else if (item.getItemId() == 1){
-//            Toast.makeText(this, "Maksim pidor", Toast.LENGTH_SHORT).show();
-//            SharedPreferences preferences = getSharedPreferences(Enter.PASS_C, MODE_PRIVATE);
-//            SharedPreferences.Editor editor = preferences.edit();
-//            editor.putInt(Enter.PASS_C, 1234);
-//            editor.apply();
-//            FragmentManager fragmentManager1 = getSupportFragmentManager();
-//            DialogChangeFrag dialogChangeFrag = new DialogChangeFrag();
-//            dialogChangeFrag.show(fragmentManager1, "md");
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
             builder.setTitle("Change code");

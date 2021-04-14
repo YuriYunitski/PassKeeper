@@ -14,13 +14,12 @@ import android.widget.TextView;
 
 public class Enter extends AppCompatActivity implements View.OnClickListener {
 
-    static SharedPreferences preferences;
+    SharedPreferences preferences;
     Button one, two, three, four, five, six, seven, eight, nine, zero, del;
     String enterCode, in1, in2, in3, in4, inputCode;
     int pass;
     ImageView first, second, third, fourth;
     boolean is1en, is2en, is3en, is4en;
-    PassCode passCode;
     TextView greet;
     public static final String PASS_C = "ACCESS";
 
@@ -78,10 +77,6 @@ public class Enter extends AppCompatActivity implements View.OnClickListener {
             }
 
     }
-
-//    public Enter(int pass){
-//        this.pass = pass;
-//    }
 
     private void firstEnter(){
         if (pass == 0){
