@@ -158,20 +158,20 @@ public class Enter extends AppCompatActivity implements View.OnClickListener {
                 finish();
             } else {
                 shakeAnim();
-                enterCode = "";
-                inputCode = "";
-                in1 = "";
-                in2 = "";
-                in3 = "";
-                in4 = "";
-                is1en = false;
-                is2en = false;
-                is3en = false;
-                is4en = false;
-                first.setImageResource(R.drawable.circle);
-                second.setImageResource(R.drawable.circle);
-                third.setImageResource(R.drawable.circle);
-                fourth.setImageResource(R.drawable.circle);
+                    enterCode = "";
+                    inputCode = "";
+                    in1 = "";
+                    in2 = "";
+                    in3 = "";
+                    in4 = "";
+                    is1en = false;
+                    is2en = false;
+                    is3en = false;
+                    is4en = false;
+                    first.setImageResource(R.drawable.circle);
+                    second.setImageResource(R.drawable.circle);
+                    third.setImageResource(R.drawable.circle);
+                    fourth.setImageResource(R.drawable.circle);
             }
         }
     }

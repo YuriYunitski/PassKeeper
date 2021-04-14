@@ -3,6 +3,8 @@ package com.yunitski.passkeeper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,15 +19,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     ListView listView;
-    Button addButton;
+//    Button addButton;
     ArrayList<String> arrayList;
     ArrayList<String> linksArray;
     ArrayList<String> passesArray;
@@ -34,8 +39,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static final int ACCESS_SAVE = 1;
     String res, link, pass, resIn, linkIn, passIn;
     DBHelper dbHelper;
-
+    FragmentManager fragmentManager;
     SQLiteDatabase database;
+    FloatingActionButton fab;
+    PassInfoFragment passInfoFragment;
+    FragmentTransaction fragmentTransaction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,26 +56,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Toast.makeText(getApplicationContext(), arrayList.get(position) + " " + linksArray.get(position) + " " + passesArray.get(position), Toast.LENGTH_SHORT).show();
+
                 resIn = arrayList.get(position);
                 linkIn = linksArray.get(position);
                 passIn = passesArray.get(position);
-                Intent intent = new Intent(getApplicationContext(), PassInfo.class);
-                intent.putExtra("resIn", resIn);
-                intent.putExtra("linkIn", linkIn);
-                intent.putExtra("passIn", passIn);
-                startActivity(intent);
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                passInfoFragment = new PassInfoFragment(resIn, linkIn, passIn);
+//                Bundle b = new Bundle();
+//                b.putString("resIn", resIn);
+//                b.putString("linkIn", linkIn);
+//                b.putString("passIn", passIn);
+//                passInfoFragment.setArguments(b);
+                fragmentTransaction.add(R.id.frame, passInfoFragment).commit();
+//                Intent intent = new Intent(getApplicationContext(), PassInfo.class);
+//                intent.putExtra("resIn", resIn);
+//                intent.putExtra("linkIn", linkIn);
+//                intent.putExtra("passIn", passIn);
+//                startActivity(intent);
             }
         });
-        addButton = findViewById(R.id.add_button);
-        addButton.setOnClickListener(this);
+//        addButton = findViewById(R.id.add_button);
+//        addButton.setOnClickListener(this);
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(this);
         dbHelper = new DBHelper(this);
         updateUI();
         registerForContextMenu(listView);
     }
 
+
     @Override
     public void onClick(View v) {
         startActivityForResult(new Intent(getApplicationContext(), NewPass.class), ACCESS_SAVE);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(passInfoFragment).commit();
     }
 
     @Override
@@ -92,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         this.deleteDatabase(InputData.DB_NAME);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(passInfoFragment).commit();
         updateUI();
         return super.onOptionsItemSelected(item);
     }
