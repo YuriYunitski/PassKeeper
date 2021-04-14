@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class Enter extends AppCompatActivity implements View.OnClickListener {
 
-    SharedPreferences preferences;
+    static SharedPreferences preferences;
     Button one, two, three, four, five, six, seven, eight, nine, zero, del;
     String enterCode, in1, in2, in3, in4, inputCode;
     int pass;
@@ -78,6 +78,10 @@ public class Enter extends AppCompatActivity implements View.OnClickListener {
             }
 
     }
+
+//    public Enter(int pass){
+//        this.pass = pass;
+//    }
 
     private void firstEnter(){
         if (pass == 0){
