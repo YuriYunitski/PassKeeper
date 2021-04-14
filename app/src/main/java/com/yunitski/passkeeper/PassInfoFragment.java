@@ -39,6 +39,7 @@ public class PassInfoFragment extends Fragment implements View.OnClickListener {
         tvPassInfoFrag = view.findViewById(R.id.tvPassInfoFrag);
         ok = view.findViewById(R.id.frag_ok);
         ok.setOnClickListener(this);
+        MainActivity.isFragActive = true;
 
         tvResInfoFrag.setText(r);
         tvLinkInfoFrag.setText(l);
@@ -59,6 +60,7 @@ public class PassInfoFragment extends Fragment implements View.OnClickListener {
             assert getFragmentManager() != null;
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.remove(this).commit();
+            MainActivity.isFragActive = false;
             break;
             case R.id.tvResInfoFrag:
                 String s = tvResInfoFrag.getText().toString();

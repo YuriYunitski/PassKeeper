@@ -30,7 +30,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     ListView listView;
-//    Button addButton;
     ArrayList<String> arrayList;
     ArrayList<String> linksArray;
     ArrayList<String> passesArray;
@@ -44,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     FloatingActionButton fab;
     PassInfoFragment passInfoFragment;
     FragmentTransaction fragmentTransaction;
+    public static boolean isFragActive;
 
 
     @Override
@@ -55,31 +55,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Toast.makeText(getApplicationContext(), arrayList.get(position) + " " + linksArray.get(position) + " " + passesArray.get(position), Toast.LENGTH_SHORT).show();
-
                 resIn = arrayList.get(position);
                 linkIn = linksArray.get(position);
                 passIn = passesArray.get(position);
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 passInfoFragment = new PassInfoFragment(resIn, linkIn, passIn);
-//                Bundle b = new Bundle();
-//                b.putString("resIn", resIn);
-//                b.putString("linkIn", linkIn);
-//                b.putString("passIn", passIn);
-//                passInfoFragment.setArguments(b);
                 fragmentTransaction.add(R.id.frame, passInfoFragment).commit();
-//                Intent intent = new Intent(getApplicationContext(), PassInfo.class);
-//                intent.putExtra("resIn", resIn);
-//                intent.putExtra("linkIn", linkIn);
-//                intent.putExtra("passIn", passIn);
-//                startActivity(intent);
             }
         });
-//        addButton = findViewById(R.id.add_button);
-//        addButton.setOnClickListener(this);
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
+        isFragActive = false;
         dbHelper = new DBHelper(this);
         updateUI();
         registerForContextMenu(listView);
@@ -89,8 +76,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         startActivityForResult(new Intent(getApplicationContext(), NewPass.class), ACCESS_SAVE);
+        if (isFragActive) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.remove(passInfoFragment).commit();
+        }
     }
 
     @Override
@@ -110,15 +99,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 0, 0, "Clean");
+        menu.add(0, 1, 0, "Change Password");
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        this.deleteDatabase(InputData.DB_NAME);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.remove(passInfoFragment).commit();
-        updateUI();
+        if (item.getItemId() == 0) {
+            this.deleteDatabase(InputData.DB_NAME);
+            if (isFragActive) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.remove(passInfoFragment).commit();
+            }
+            updateUI();
+        } else if (item.getItemId() == 1){
+            Toast.makeText(this, "Maksim pidor", Toast.LENGTH_SHORT).show();
+        }
         return super.onOptionsItemSelected(item);
     }
 

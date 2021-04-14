@@ -20,6 +20,9 @@ public class Enter extends AppCompatActivity implements View.OnClickListener {
     int pass;
     ImageView first, second, third, fourth;
     boolean is1en, is2en, is3en, is4en;
+    PassCode passCode;
+    TextView greet;
+    public static final String PASS_C = "ACCESS";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class Enter extends AppCompatActivity implements View.OnClickListener {
         nine.setOnClickListener(this);
         zero.setOnClickListener(this);
         del.setOnClickListener(this);
+        greet = findViewById(R.id.greet);
         enterCode = "";
         inputCode = "";
         in1 = "";
@@ -64,7 +68,25 @@ public class Enter extends AppCompatActivity implements View.OnClickListener {
         is2en = false;
         is3en = false;
         is4en = false;
-        pass = 1234;
+        preferences = getSharedPreferences(PASS_C, MODE_PRIVATE);
+            if (preferences.contains(PASS_C)){
+                greet.setText("Введите пароль");
+                pass = preferences.getInt(PASS_C, 0);
+            } else if (pass == 0){
+                greet.setText("Придумайте пароль");
+                checkIt();
+            }
+
+    }
+
+    private void firstEnter(){
+        if (pass == 0){
+            String t = in1 + in2 + in3 + in4;
+            pass = Integer.parseInt(t);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt(PASS_C, pass);
+            editor.apply();
+        }
     }
 
     @Override
@@ -153,6 +175,8 @@ public class Enter extends AppCompatActivity implements View.OnClickListener {
     }
     public void checkIt(){
         if (enterCode.length() == 4) {
+
+            firstEnter();
             if (Integer.parseInt(enterCode) == pass) {
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
