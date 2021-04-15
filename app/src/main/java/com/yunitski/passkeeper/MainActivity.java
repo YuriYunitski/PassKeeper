@@ -2,6 +2,7 @@ package com.yunitski.passkeeper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -13,6 +14,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.ContextMenu;
@@ -27,6 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     PassInfoFragment passInfoFragment;
     FragmentTransaction fragmentTransaction;
     public static boolean isFragActive;
+    SearchView searchView;
 
 
     @Override
@@ -58,7 +63,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ActionBar actionBar = getSupportActionBar();
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#000000"));
+        actionBar.setBackgroundDrawable(colorDrawable);
+
         listView = findViewById(R.id.list);
+        searchView = findViewById(R.id.search_v);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -73,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
+
         isFragActive = false;
         dbHelper = new DBHelper(this);
         updateUI();
@@ -114,8 +125,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, 0, 0, "Clean");
-        menu.add(0, 1, 0, "Change Password");
+        menu.add(0, 0, 0, "Очистить");
+        menu.add(0, 1, 0, "Пароль для входа");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -131,8 +142,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (item.getItemId() == 1){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setCancelable(false);
-            builder.setTitle("Change code");
-            builder.setMessage("New Code:");
+            builder.setTitle("Пароль для входа");
+            builder.setMessage("Новый пароль:");
             LayoutInflater inflater = getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_to_change_pass, null);
             builder.setView(view);
@@ -141,20 +152,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (editText.length() == 4) {
-                        Toast.makeText(getApplicationContext(), "Completed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Пароль для входа изменен", Toast.LENGTH_SHORT).show();
                         SharedPreferences preferences = getSharedPreferences(Enter.PASS_C, MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putInt(Enter.PASS_C, Integer.parseInt(editText.getText().toString()));
                         editor.apply();
                     } else {
-                        Toast.makeText(getApplicationContext(), "too short", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Слишком короткий", Toast.LENGTH_SHORT).show();
 
                     }
                 }
             }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
                 }
             });
             builder.create().show();
@@ -215,6 +225,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             arrayAdapter = new ArrayAdapter<>(this,  android.R.layout.simple_expandable_list_item_1,
                     arrayList);
             listView.setAdapter(arrayAdapter);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    arrayAdapter.getFilter().filter(newText);
+                    return false;
+                }
+            });
         } else {
             arrayAdapter.clear();
             arrayAdapter.addAll(arrayList);
