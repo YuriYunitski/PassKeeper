@@ -124,6 +124,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 0, 0, "Очистить");
         menu.add(0, 1, 0, "Пароль для входа");
@@ -134,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == 0) {
             this.deleteDatabase(InputData.DB_NAME);
+            updateUI();
             if (isFragActive) {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.remove(passInfoFragment).commit();
@@ -170,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             builder.create().show();
 
         }
+        updateUI();
         return super.onOptionsItemSelected(item);
     }
 
