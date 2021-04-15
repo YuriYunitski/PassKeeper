@@ -21,6 +21,7 @@ public class NewPass extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_pass);
+        setTitle("Новый пароль");
 
         res = findViewById(R.id.et_name_of_res);
         link = findViewById(R.id.et_link);

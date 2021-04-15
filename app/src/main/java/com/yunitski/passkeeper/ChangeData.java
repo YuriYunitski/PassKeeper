@@ -24,6 +24,7 @@ public class ChangeData extends AppCompatActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_data);
+        setTitle("Редактирование");
 
         resCh = findViewById(R.id.et_name_of_res_change);
         linkCh = findViewById(R.id.et_link_change);
