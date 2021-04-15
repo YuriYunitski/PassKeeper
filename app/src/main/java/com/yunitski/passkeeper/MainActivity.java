@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<Integer> indexes;
     ArrayAdapter<String> arrayAdapter;
     public static final int ACCESS_SAVE = 1;
+    public static final int DB_CHANGE = 2;
     String res, link, pass, resIn, linkIn, passIn;
     DBHelper dbHelper;
     FragmentManager fragmentManager;
@@ -91,13 +92,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){
-            res = data.getStringExtra("res");
-            link = data.getStringExtra("link");
-            pass = data.getStringExtra("pass");
-            NewPassClass newPassClass = new NewPassClass(res, link, pass);
-            String r = newPassClass.getNameOfResource();
-            arrayAdapter.add(r);
+        if (requestCode == ACCESS_SAVE) {
+            if (resultCode == RESULT_OK) {
+                res = data.getStringExtra("res");
+                link = data.getStringExtra("link");
+                pass = data.getStringExtra("pass");
+                NewPassClass newPassClass = new NewPassClass(res, link, pass);
+                String r = newPassClass.getNameOfResource();
+                arrayAdapter.add(r);
+            }
+        } else if (requestCode == DB_CHANGE){
+            if (resultCode == RESULT_OK){
+                res = data.getStringExtra("r1");
+                link = data.getStringExtra("l1");
+                pass = data.getStringExtra("p1");
+
+            }
         }
         updateUI();
     }
@@ -167,6 +177,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (item.getItemId()){
             case R.id.delete:
                 deleteFromBase(info.position);
+                break;
+            case R.id.change_smth:
+                Intent intent = new Intent(getApplicationContext(), ChangeData.class);
+                String r = arrayList.get(info.position);
+                String l = linksArray.get(info.position);
+                String p = passesArray.get(info.position);
+                int i = indexes.get(info.position);
+                intent.putExtra("res", r);
+                intent.putExtra("link", l);
+                intent.putExtra("pass", p);
+                intent.putExtra("ind", i);
+                startActivityForResult(intent, DB_CHANGE);
                 break;
         }
         return super.onContextItemSelected(item);
