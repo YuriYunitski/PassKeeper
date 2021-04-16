@@ -18,12 +18,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,6 +33,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -230,8 +233,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             indexes.add(0, cursor.getInt(idIndex));
         }
         if (arrayAdapter == null) {
-            arrayAdapter = new ArrayAdapter<>(this,  android.R.layout.simple_expandable_list_item_1,
-                    arrayList);
+            arrayAdapter = new ArrayAdapter<String>(this,  android.R.layout.simple_expandable_list_item_1,
+                    arrayList){
+                @NonNull
+                @Override
+                public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                    TextView item = (TextView) super.getView(position,convertView,parent);
+                    item.setTextSize(TypedValue.COMPLEX_UNIT_DIP,22);
+                    return item;
+                }
+            };
             listView.setAdapter(arrayAdapter);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override

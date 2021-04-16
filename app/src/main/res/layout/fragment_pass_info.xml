@@ -32,13 +32,15 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="6dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="12dp"
+                    style="@style/textSt"
                     android:text="Название"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
+
                 <View
-                    android:id="@+id/divider6"
+                    android:id="@+id/divider"
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -76,14 +78,16 @@
                 android:weightSum="4">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="6dp"
-                    android:layout_marginEnd="26dp"
-                    android:text="Ссылка"
+                    android:layout_marginEnd="36dp"
+                    style="@style/textSt"
+                    android:text="Адрес"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
+
 
                 <View
                     android:id="@+id/divider5"
@@ -93,7 +97,7 @@
                     android:background="?android:attr/listDivider" />
 
                 <ScrollView
-                    android:layout_width="330dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="4">
 
@@ -124,17 +128,19 @@
                 android:weightSum="4">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="6dp"
                     android:layout_marginEnd="28dp"
+                    style="@style/textSt"
                     android:text="Пароль"
                     android:textColor="@color/black"
                     android:textSize="14sp"/>
 
+
                 <View
-                    android:id="@+id/divider7"
+                    android:id="@+id/divider6"
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -174,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="100dp"
                     android:text="ok" />
 
             </LinearLayout>
