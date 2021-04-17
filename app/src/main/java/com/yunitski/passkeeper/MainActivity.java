@@ -232,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             passesArray.add(0, cursor.getString(indexP));
             indexes.add(0, cursor.getInt(idIndex));
         }
+
         if (arrayAdapter == null) {
             arrayAdapter = new ArrayAdapter<String>(this,  android.R.layout.simple_expandable_list_item_1,
                     arrayList){
@@ -240,9 +241,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                     TextView item = (TextView) super.getView(position,convertView,parent);
                     item.setTextSize(TypedValue.COMPLEX_UNIT_DIP,22);
+                    item.setBackgroundColor(Color.parseColor("#f7f7f7"));
                     return item;
                 }
             };
+
             listView.setAdapter(arrayAdapter);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
