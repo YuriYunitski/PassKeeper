@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String r = newPassClass.getNameOfResource();
                 arrayAdapter.add(r);
             }
+            updateUI();
         } else if (requestCode == DB_CHANGE){
             if (resultCode == RESULT_OK){
                 res = data.getStringExtra("r1");

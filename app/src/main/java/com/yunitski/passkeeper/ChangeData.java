@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -54,6 +55,7 @@ public class ChangeData extends AppCompatActivity implements View.OnClickListene
         intent.putExtra("l1", linkCh.getText().toString());
         intent.putExtra("p1", passCh.getText().toString());
         setResult(RESULT_OK, intent);
+        Toast.makeText(this, "Сохранено", Toast.LENGTH_SHORT).show();
         finish();
 
     }
