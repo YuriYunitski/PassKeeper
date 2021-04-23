@@ -11,7 +11,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + InputData.TaskEntry.TABLE + " (" + InputData.TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + InputData.TaskEntry.NAMES + " TEXT, " + InputData.TaskEntry.LINKS + " TEXT, " + InputData.TaskEntry.PASSES + " TEXT);";
+        String createTable = "CREATE TABLE " + InputData.TaskEntry.TABLE + " (" + InputData.TaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + InputData.TaskEntry.NAMES + " TEXT, " + InputData.TaskEntry.NAMESTR + " TEXT, " + InputData.TaskEntry.LINKS + " TEXT, " + InputData.TaskEntry.PASSES + " TEXT);";
         db.execSQL(createTable);
     }
 

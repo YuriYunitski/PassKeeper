@@ -23,11 +23,12 @@ import androidx.fragment.app.FragmentTransaction;
 import java.util.Objects;
 
 public class PassInfoFragment extends Fragment implements View.OnClickListener {
-    TextView tvResInfoFrag, tvLinkInfoFrag, tvPassInfoFrag;
-    String r, l, p;
+    TextView tvResInfoFrag, tvNameInfoFrag, tvLinkInfoFrag, tvPassInfoFrag;
+    String r, n, l, p;
     Button ok;
-    public PassInfoFragment(String r, String l, String p){
+    public PassInfoFragment(String r, String n, String l, String p){
         this.r = r;
+        this.n = n;
         this.l = l;
         this.p = p;
     }
@@ -37,6 +38,7 @@ public class PassInfoFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pass_info, container, false);
         tvResInfoFrag = view.findViewById(R.id.tvResInfoFrag);
+        tvNameInfoFrag = view.findViewById(R.id.tvNameInfoFrag);
         tvLinkInfoFrag = view.findViewById(R.id.tvLinkInfoFrag);
         tvPassInfoFrag = view.findViewById(R.id.tvPassInfoFrag);
         ok = view.findViewById(R.id.frag_ok);
@@ -44,12 +46,15 @@ public class PassInfoFragment extends Fragment implements View.OnClickListener {
         MainActivity.isFragActive = true;
 
         tvResInfoFrag.setText(r);
+        tvNameInfoFrag.setText(n);
         tvLinkInfoFrag.setText(l);
         tvPassInfoFrag.setText(p);
         tvResInfoFrag.setClickable(true);
+        tvNameInfoFrag.setClickable(true);
         tvLinkInfoFrag.setClickable(true);
         tvPassInfoFrag.setClickable(true);
         tvResInfoFrag.setOnClickListener(this);
+        tvNameInfoFrag.setOnClickListener(this);
         tvLinkInfoFrag.setOnClickListener(this);
         tvPassInfoFrag.setOnClickListener(this);
         return view;
@@ -69,6 +74,13 @@ public class PassInfoFragment extends Fragment implements View.OnClickListener {
                 ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("copied_text", s);
                 clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), "Скопировано", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tvNameInfoFrag:
+                String s1 = tvNameInfoFrag.getText().toString();
+                ClipboardManager clipboard1 = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip1 = ClipData.newPlainText("copied_text", s1);
+                clipboard1.setPrimaryClip(clip1);
                 Toast.makeText(getContext(), "Скопировано", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tvLinkInfoFrag:

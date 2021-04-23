@@ -3,11 +3,13 @@ package com.yunitski.passkeeper;
 public class NewPassClass {
 
     String nameOfResource;
+    String name;
     String link;
     String password;
 
-    public NewPassClass(String nameOfResource, String link, String password) {
+    public NewPassClass(String nameOfResource, String name, String link, String password) {
         this.nameOfResource = nameOfResource;
+        this.name = name;
         this.link = link;
         this.password = password;
     }
@@ -15,6 +17,14 @@ public class NewPassClass {
     public NewPassClass(String nameOfResource, String password) {
         this.nameOfResource = nameOfResource;
         this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getNameOfResource() {

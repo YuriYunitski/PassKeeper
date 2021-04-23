@@ -14,9 +14,9 @@ import android.widget.Toast;
 
 public class NewPass extends AppCompatActivity implements View.OnClickListener {
 
-    EditText res, link, pass;
+    EditText res, name, link, pass;
     Button save;
-    String resToS, linkToS, passToS;
+    String resToS, nameToS, linkToS, passToS;
     DBHelper dbHelper;
 
     @Override
@@ -26,6 +26,7 @@ public class NewPass extends AppCompatActivity implements View.OnClickListener {
         setTitle("Новый пароль");
 
         res = findViewById(R.id.et_name_of_res);
+        name = findViewById(R.id.et_name);
         link = findViewById(R.id.et_link);
         pass = findViewById(R.id.et_pass);
         save = findViewById(R.id.save_button);
@@ -36,6 +37,7 @@ public class NewPass extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         resToS = res.getText().toString();
+        nameToS = name.getText().toString();
         linkToS = link.getText().toString();
         passToS = pass.getText().toString();
         ContentValues cv = new ContentValues();
@@ -43,10 +45,12 @@ public class NewPass extends AppCompatActivity implements View.OnClickListener {
         if (!resToS.isEmpty() || !linkToS.isEmpty() || !passToS.isEmpty()) {
             Intent intent = new Intent();
             intent.putExtra("res", resToS);
+            intent.putExtra("name", nameToS);
             intent.putExtra("link", linkToS);
             intent.putExtra("pass", passToS);
             setResult(RESULT_OK, intent);
             cv.put(InputData.TaskEntry.NAMES, resToS);
+            cv.put(InputData.TaskEntry.NAMESTR, nameToS);
             cv.put(InputData.TaskEntry.LINKS, linkToS);
             cv.put(InputData.TaskEntry.PASSES, passToS);
             db.insert(InputData.TaskEntry.TABLE, null, cv);

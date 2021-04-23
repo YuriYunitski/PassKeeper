@@ -47,11 +47,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ArrayList<String> arrayList;
     ArrayList<String> linksArray;
     ArrayList<String> passesArray;
+    ArrayList<String> namesList;
     ArrayList<Integer> indexes;
     ArrayAdapter<String> arrayAdapter;
     public static final int ACCESS_SAVE = 1;
     public static final int DB_CHANGE = 2;
-    String res, link, pass, resIn, linkIn, passIn;
+    String res, link, pass, name, resIn, linkIn, passIn, nameIn;
     DBHelper dbHelper;
     FragmentManager fragmentManager;
     SQLiteDatabase database;
@@ -100,9 +101,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (requestCode == ACCESS_SAVE) {
             if (resultCode == RESULT_OK) {
                 res = data.getStringExtra("res");
+                name = data.getStringExtra("name");
                 link = data.getStringExtra("link");
                 pass = data.getStringExtra("pass");
-                NewPassClass newPassClass = new NewPassClass(res, link, pass);
+                NewPassClass newPassClass = new NewPassClass(res, name, link, pass);
                 String r = newPassClass.getNameOfResource();
                 arrayAdapter.add(r);
             }
@@ -110,9 +112,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (requestCode == DB_CHANGE){
             if (resultCode == RESULT_OK){
                 res = data.getStringExtra("r1");
+                name = data.getStringExtra("n1");
                 link = data.getStringExtra("l1");
                 pass = data.getStringExtra("p1");
-
             }
         }
         updateUI();
@@ -196,10 +198,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String r = arrayList.get(info.position);
                 String l = linksArray.get(info.position);
                 String p = passesArray.get(info.position);
+                String n = namesList.get(info.position);
                 int i = indexes.get(info.position);
                 intent.putExtra("res", r);
                 intent.putExtra("link", l);
                 intent.putExtra("pass", p);
+                intent.putExtra("name", n);
                 intent.putExtra("ind", i);
                 startActivityForResult(intent, DB_CHANGE);
                 break;
@@ -211,17 +215,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         arrayList = new ArrayList<>();
         linksArray = new ArrayList<>();
         passesArray = new ArrayList<>();
+        namesList = new ArrayList<>();
         indexes = new ArrayList<>();
         database = dbHelper.getReadableDatabase();
 
 
-        Cursor cursor = database.query(InputData.TaskEntry.TABLE, new String[]{InputData.TaskEntry._ID, InputData.TaskEntry.NAMES, InputData.TaskEntry.LINKS, InputData.TaskEntry.PASSES}, null, null, null, null, null);
+        Cursor cursor = database.query(InputData.TaskEntry.TABLE, new String[]{InputData.TaskEntry._ID, InputData.TaskEntry.NAMES,InputData.TaskEntry.NAMESTR, InputData.TaskEntry.LINKS, InputData.TaskEntry.PASSES}, null, null, null, null, null);
         while (cursor.moveToNext()){
             int idIndex = cursor.getColumnIndex(InputData.TaskEntry._ID);
             int index = cursor.getColumnIndex(InputData.TaskEntry.NAMES);
+            int indexNN = cursor.getColumnIndex(InputData.TaskEntry.NAMESTR);
             int indexL = cursor.getColumnIndex(InputData.TaskEntry.LINKS);
             int indexP = cursor.getColumnIndex(InputData.TaskEntry.PASSES);
             arrayList.add( cursor.getString(index));
+            namesList.add(cursor.getString(indexNN));
             linksArray.add( cursor.getString(indexL));
             passesArray.add( cursor.getString(indexP));
             indexes.add( cursor.getInt(idIndex));
@@ -247,14 +254,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     int actualPosition = arrayList.indexOf(arrayAdapter.getItem(position));
                         resIn = arrayList.get(actualPosition);
+                        nameIn = namesList.get(actualPosition);
                         linkIn = linksArray.get(actualPosition);
                         passIn = passesArray.get(actualPosition);
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
-                        passInfoFragment = new PassInfoFragment(resIn, linkIn, passIn);
+                        passInfoFragment = new PassInfoFragment(resIn, nameIn, linkIn, passIn);
                         fragmentTransaction.add(R.id.frame, passInfoFragment).commit();
-                        int l = indexes.get(position) - 1;
-                        Toast.makeText(getApplicationContext(), ""+l + " " + id, Toast.LENGTH_SHORT).show();
 
                     }
             });
