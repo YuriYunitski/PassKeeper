@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -72,18 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         listView = findViewById(R.id.list);
         searchView = findViewById(R.id.search_v);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                resIn = arrayList.get(position);
-                linkIn = linksArray.get(position);
-                passIn = passesArray.get(position);
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                passInfoFragment = new PassInfoFragment(resIn, linkIn, passIn);
-                fragmentTransaction.add(R.id.frame, passInfoFragment).commit();
-            }
-        });
+
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
@@ -101,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.remove(passInfoFragment).commit();
         }
+        updateUI();
     }
 
     @Override
@@ -222,16 +213,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         passesArray = new ArrayList<>();
         indexes = new ArrayList<>();
         database = dbHelper.getReadableDatabase();
+
+
         Cursor cursor = database.query(InputData.TaskEntry.TABLE, new String[]{InputData.TaskEntry._ID, InputData.TaskEntry.NAMES, InputData.TaskEntry.LINKS, InputData.TaskEntry.PASSES}, null, null, null, null, null);
         while (cursor.moveToNext()){
             int idIndex = cursor.getColumnIndex(InputData.TaskEntry._ID);
             int index = cursor.getColumnIndex(InputData.TaskEntry.NAMES);
             int indexL = cursor.getColumnIndex(InputData.TaskEntry.LINKS);
             int indexP = cursor.getColumnIndex(InputData.TaskEntry.PASSES);
-            arrayList.add(0, cursor.getString(index));
-            linksArray.add(0, cursor.getString(indexL));
-            passesArray.add(0, cursor.getString(indexP));
-            indexes.add(0, cursor.getInt(idIndex));
+            arrayList.add( cursor.getString(index));
+            linksArray.add( cursor.getString(indexL));
+            passesArray.add( cursor.getString(indexP));
+            indexes.add( cursor.getInt(idIndex));
         }
 
         if (arrayAdapter == null) {
@@ -248,23 +241,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             };
 
             listView.setAdapter(arrayAdapter);
-            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public boolean onQueryTextSubmit(String query) {
-                    return false;
-                }
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    arrayAdapter.getFilter().filter(newText);
-                    return false;
-                }
+                    int actualPosition = arrayList.indexOf(arrayAdapter.getItem(position));
+                        resIn = arrayList.get(actualPosition);
+                        linkIn = linksArray.get(actualPosition);
+                        passIn = passesArray.get(actualPosition);
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentTransaction = fragmentManager.beginTransaction();
+                        passInfoFragment = new PassInfoFragment(resIn, linkIn, passIn);
+                        fragmentTransaction.add(R.id.frame, passInfoFragment).commit();
+                        int l = indexes.get(position) - 1;
+                        Toast.makeText(getApplicationContext(), ""+l + " " + id, Toast.LENGTH_SHORT).show();
+
+                    }
             });
         } else {
             arrayAdapter.clear();
             arrayAdapter.addAll(arrayList);
             arrayAdapter.notifyDataSetChanged();
         }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                arrayAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+
+
 
         cursor.close();
         database.close();
